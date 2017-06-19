@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.PaperMapper">
+	
+	<resultMap type="paper" id="paperExamTypeMap">
+		<id property="pid" column="pid"/>
+		<result property="paperName" column="paperName" />
+		<result property="questionNumber" column="questionNumber" />
+		<result property="createTime" column="createTime" />
+		<association property="types" javaType="types">
+			<id property="id" column="types_id"/>
+			<result property="typeName" column="typeName" />
+		</association>
+		<collection property="setItem" ofType="item">
+			<id property="iid" column="item_id" />
+			<result property="topic" column="topic" />
+			<result property="optionA" column="optionA" />
+			<result property="optionB" column="optionB" />
+			<result property="optionC" column="optionC" />
+			<result property="optionD" column="optionD" />
+			<result property="answer" column="answer" />
+			<association property="types" javaType="types">
+				<id property="id" column="types_id" />
+				<result property="typeName" column="typeName" />
+			</association>
+		</collection>
+	</resultMap>
+	<select id="findAllPaper" resultMap="paperExamTypeMap">
+		select p.pid, p.paperName, p.questionNumber, p.createTime, p.types_id, 
+		t.typeName from paper p join types t on p.types_id = t.id
+	</select>
+	<select id="findPaperAndItem" parameterType="paper" resultMap="paperExamTypeMap">
+		select p.pid, p.paperName, p.questionNumber, p.createTime, p.types_id,
+		t.typeName, i.iid, i.topic, i.optionA, i.optionB, i.optionC,
+		i.optionD, i.answer 
+		from paper p join types t on p.types_id = t.id 
+		join item_paper itemp on p.pid =itemp.paper_id 
+		join item i on itemp.item_id = i.iid
+		where p.pid = #{pid}
+	</select>
+	
+	<select id="findPaperByNameOrTypes" parameterType="paperCondition" resultMap="paperExamTypeMap" >
+		select p.pid, p.paperName, p.questionNumber, p.createTime, p.types_id, 
+		t.typeName, i.iid, i.topic, i.optionA, i.optionB, i.optionC,
+		i.optionD, i.answer 
+		from paper p join types t on p.types_id = t.id 
+		join item_paper itemp on p.pid =itemp.paper_id 
+		join item i on itemp.item_id = i.iid
+		<where>
+			<if test="paperName != null and paperName != ''">
+				and p.paperName like '%${paperName}%' 
+			</if>
+			<if test="typeName != null and typeName != ''">
+				and t.typeName like '%${typeName}%'
+			</if>
+		</where>
+	</select>
+	
+	<insert id="createBlankPaper" parameterType="paper">
+		<selectKey keyProperty="pid" order="AFTER" resultType="int">
+			SELECT last_insert_id()
+		</selectKey>
+		insert into paper(paperName, questionNumber, createTime, types_id) values(#{paperName}, #{questionNumber}, #{createTime}, #{types.id})
+	</insert>
+	
+	<insert id="createPaper" parameterType="paperCondition">
+			insert into item_paper(paper_id, item_id) values(#{pid}, #{iid})
+	</insert>
+	
+	<update id="updatePaper" parameterType="paper">
+		update paper set paperName=#{paperName} where pid = #{pid}
+	</update>
+	
+	<select id="findPaperByTypesID" parameterType="types" resultMap="paperExamTypeMap" >
+		select p.pid, p.paperName, p.questionNumber, p.createTime, p.types_id,
+		t.typeName, i.iid, i.topic, i.optionA, i.optionB, i.optionC,
+		i.optionD, i.answer 
+		from paper p join types t on p.types_id = t.id 
+		join item_paper itemp on p.pid =itemp.paper_id 
+		join item i on itemp.item_id = i.iid
+		where p.types_id = #{id}
+	</select>
+	<delete id="deletePaperItem" parameterType="paper">
+		delete from item_paper where paper_id = #{pid}
+	</delete>
+	<delete id="deletePaper" parameterType="paper">
+		delete from paper where pid = #{pid} 
+	</delete>
+</mapper>
+
+

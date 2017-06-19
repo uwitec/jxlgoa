@@ -1,0 +1,99 @@
+package com.wuxianedu.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.wuxianedu.domain.Item;
+import com.wuxianedu.exception.ItemException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.mapper.ItemMapper;
+
+@Service
+public class ItemService {
+	
+	@Resource
+	private ItemMapper itemMapper;
+	
+	public List<Item> findAllItem() throws ItemException, SystemException{
+		List<Item> list=null;
+		try{
+			list=itemMapper.findAllItem();
+		}catch(Exception e){
+			throw new SystemException("数据库查找错误-ItemService-findAllItem"+e);
+		}
+		
+		if(list==null){
+			throw new ItemException("查找所有数据为空！");
+		}
+		return list;
+		
+	}
+	
+	public List<Item> findItemByCondition(Item items) throws ItemException, SystemException{
+		List<Item> list=null;
+		try{
+			list=itemMapper.findItemByCondition(items);
+		}catch(Exception e){
+			throw new SystemException("数据库错误-ItemService-findItemByCondition"+e);
+		}
+		if(list==null){
+			throw new ItemException("查找条件数据为空！");
+		}
+		return list;
+	}
+	
+	public void insertItem(Item items) throws SystemException{
+		try{
+			itemMapper.insertItem(items);
+		}catch(Exception e){
+			throw new SystemException("数据库错误-ItemService-insertItem"+e);
+		}
+	}
+	
+	public void updateItem(Item items) throws SystemException{
+		try{
+			itemMapper.updateItem(items);
+		}catch(Exception e){
+			throw new SystemException("数据库错误-ItemService-updateItem"+e);
+		}
+		
+	}
+	
+	public void deleteItem(Item items) throws SystemException{
+		try{
+			itemMapper.deleteItem(items);
+		}catch(Exception e){
+			throw new SystemException("数据库错误-ItemService-deleteItem"+e);
+		}
+		
+	}
+	
+	public List<Item> findItemCreatePaper(Item items) throws SystemException, ItemException{
+		List<Item> list=null;
+		try{
+			list=itemMapper.findItemCreatePaper(items);
+		}catch(Exception e){
+			throw new SystemException("数据库错误-ItemService-findItemCreatePaper"+e);
+		}
+		if(list==null){
+			throw new ItemException("查找条件数据生成试卷为空！");
+		}
+		return list;
+		
+	}
+	
+	
+//	public static void main(String[] args) {
+//		AbstractApplicationContext context=new ClassPathXmlApplicationContext("com/wuxianedu/config/applicationContext.xml");
+//		ItemService ser=(ItemService) context.getBean("itemService");
+//		System.out.println(ser);
+//		System.out.println(ser.findAllItem());
+//		for (Item a : ser.findAllItem()) {
+//			System.out.println(a.getTopic());
+//		}
+//	}
+
+}

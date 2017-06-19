@@ -1,0 +1,147 @@
+/*package com.wuxianedu.controller;
+
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.wuxianedu.domain.Item;
+import com.wuxianedu.domain.ItemBean;
+import com.wuxianedu.domain.Types;
+import com.wuxianedu.exception.ItemException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.service.ItemService;
+
+@Controller
+public class ItemHandler {
+
+	@Resource
+	private ItemService itemService;
+	
+	//查找所有试题
+	@RequestMapping("findAllItem")
+	public ModelAndView findAllItem(){
+		ModelAndView mav=new ModelAndView();
+		List<Item> list=null;
+		try {
+			list=itemService.findAllItem();
+		} catch (ItemException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		mav.addObject("Itemlist",list);
+		mav.setViewName("showItem");
+		return mav;
+		
+	}
+	
+	//添加试题
+	@RequestMapping("insertItem")
+	public String insertItem(@Valid @ModelAttribute("itemBean")ItemBean itemBean,Errors errors){
+		if(errors.hasErrors()){
+			return "addItem";	
+		}
+		try {
+			Item items=new Item();
+			items.setTopic(itemBean.getTopic());
+			items.setOptionA(itemBean.getOptionA());
+			items.setOptionB(itemBean.getOptionB());
+			items.setOptionC(itemBean.getOptionC());
+			items.setOptionD(itemBean.getOptionD());
+			items.setAnswer(itemBean.getAnswer());
+			Types types=new Types();
+			types.setId(Integer.parseInt(itemBean.getTypes()));
+			items.setTypes(types);
+			itemService.insertItem(items);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "addItem";
+		}
+		return "forward:findAllItem.do";
+	}
+	
+	@RequestMapping("findAItem")
+	public ModelAndView findAItem(Item items){
+		ModelAndView mav=new ModelAndView();
+		Item ite=null;
+		try {
+			ite=itemService.findAItemById(items);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		mav.addObject("items", ite);
+		mav.setViewName("updateAItem");
+		return mav;
+	}
+	//修改试题
+	@RequestMapping("updateItem")
+	public String updateItem(@Valid @ModelAttribute("itemBean")ItemBean itemBean,Errors errors){
+		if(errors.hasErrors()){
+			return "updateAItem";	
+		}
+		try {
+			Item items=new Item();
+			items.setTopic(itemBean.getTopic());
+			items.setOptionA(itemBean.getOptionA());
+			items.setOptionB(itemBean.getOptionB());
+			items.setOptionC(itemBean.getOptionC());
+			items.setOptionD(itemBean.getOptionD());
+			items.setAnswer(itemBean.getAnswer());
+			Types types=new Types();
+			types.setId(Integer.parseInt(itemBean.getTypes()));
+			items.setTypes(types);
+			itemService.updateItem(items);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "updateAItem";
+		}
+		return "redirect:/findAllItem.do";
+	}
+	
+	//删除试题
+	@ResponseBody
+	@RequestMapping("deleteItem")
+	public String deleteItem(Item items){
+		try {
+			System.out.println("111111111111"+items);
+			itemService.deleteItem(items);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return "success";
+	}
+	
+	
+	//按条件查找
+	@RequestMapping("findItemByCondition")
+	public ModelAndView findItemByCondition(@Valid @ModelAttribute("itemBean")ItemBean itemBean){
+		ModelAndView mav=new ModelAndView();
+		List<Item> list=null;
+		try {
+			Item items=new Item();
+			items.setTopic(itemBean.getTopic());
+			Types types=new Types();
+			types.setId(Integer.parseInt(itemBean.getTypes()));
+			items.setTypes(types);
+			list=itemService.findItemByCondition(items);
+		} catch (ItemException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		mav.addObject("Itemlist",list);
+		mav.setViewName("showItem");
+		return mav;
+	}
+	
+}
+*/

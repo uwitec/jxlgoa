@@ -1,0 +1,119 @@
+package com.wuxianedu.service;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wuxianedu.domain.Adviser;
+import com.wuxianedu.domain.Grade;
+import com.wuxianedu.domain.Trainer;
+import com.wuxianedu.domain.Types;
+import com.wuxianedu.exception.SelectStudentException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.mapper.GradeMapper;
+
+@Service
+public class GradeService {
+
+	@Resource
+	private GradeMapper gradeMapper;
+	//添加班级
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void insertGra(Grade grade) throws SystemException{
+		try {
+			gradeMapper.insertGrade(grade);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException("系统内部错误 GradeService-insertGra" + e);
+		}
+	}
+	
+	//根据班级名称查询
+	@Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly=true)
+	public Grade findGrade(String name) throws SystemException, SelectStudentException{
+			Grade grade = new Grade();
+			grade.setClassName(name);
+			Grade gra = null;
+		try {
+			gra = gradeMapper.queryGrade(grade);
+		} catch (Exception e) {
+			throw new SystemException("系统查找错误 GradeService-findGrade" + e);
+		}
+		
+		if( gra == null){
+			throw new SelectStudentException("班级查找错误");
+		}
+		return gra;
+	}
+	
+	//根据id删除
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={SystemException.class})
+	public void delGrade(int id) throws SystemException{
+		try {
+			gradeMapper.deleteGrade(id);
+		} catch (Exception e) {
+			throw new SystemException("系统删除错误GradeService-delGrade" + e);
+		}
+	}
+	
+	//更新班级
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={SystemException.class})
+	public void  updateGrad(Grade grade) throws SystemException{
+		try {
+			gradeMapper.updateGrade(grade);
+		} catch (Exception e) {
+			throw new SystemException("系统更新异常GradeService-updateGrad" + e);
+		}
+	}
+	
+	//查询符合条件的班级
+	@Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly=true)
+	public List<Grade> findSomeGrades(Grade grade) throws SystemException, SelectStudentException{
+		List<Grade> grades = null;
+		try {
+			grades = gradeMapper.findGrade(grade);
+		} catch (Exception e) {
+			throw new SystemException("系统内部查询错误 GradeService-findSomeGrades" + e);
+		}
+		if(grades == null){
+			throw new SelectStudentException("暂未开班");
+		}
+		return grades;
+	}
+	
+	public static void main(String[] args) throws SystemException, SelectStudentException {
+		
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("com/wuxianedu/config/applicationContext.xml");
+		GradeService gradeService = (GradeService)context.getBean("gradeService");
+	Types types = new Types();
+		types.setId(2);
+		Trainer trainer = new Trainer();
+		trainer.setTid(1);
+		Adviser adviser = new Adviser();
+		adviser.setAid(3);
+		/*	gradeService.insertGra(new Grade("H5", types, new Date(), "4个月", "学习中", trainer, adviser));*/
+		
+		/*Grade frGrade = new Grade();
+		frGrade.setClassName("H5");
+		List<Grade> lists = gradeService.findSomeGrades(frGrade);
+		for (Grade grade : lists) {
+			System.out.println(grade.getClassName() + "111111111");
+		}*/
+//		gradeService.delGrade(6);
+		/*Grade grade1 = gradeService.findGrade("java大数据");
+		System.out.println(grade1);*/
+		
+		gradeService.updateGrad(new Grade("H5", types, new Date(), "5个月", "学习中", trainer, adviser));
+		
+	}
+}
+
+

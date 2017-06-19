@@ -1,0 +1,102 @@
+package com.wuxianedu.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wuxianedu.domain.Student;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.mapper.StudentMapper;
+
+@Service
+public class StudentService {
+
+	@Resource
+	private StudentMapper studentMapper;
+	
+	
+	//根据用户名和密码查询
+	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
+	public Student lookStu(String phone,String password) throws SystemException{
+		Student student = new Student();
+		student.setPhone(phone);
+		student.setPassword(password);
+		Student stud = null;
+		try {
+			stud = studentMapper.lookStudent(student);
+		} catch (Exception e) {
+			throw new SystemException(e);
+		}
+		return stud;
+	}
+	//添加学生
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor={SystemException.class})
+	public void insertStu(Student student) throws SystemException{
+		try {
+			studentMapper.insertStudent(student);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException("系统内部错误");
+		}
+	}
+	
+	//查询指定条件学生
+	@Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly=true)
+	public Student findStudent(Student student) throws SystemException{
+			Student student2 = null;
+		try {
+			student2 = studentMapper.queryStudent(student);
+		} catch (Exception e) {
+			throw new SystemException("系统查找错误");
+		}
+		return student2;
+	}
+	
+	//根据名字删除学生
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={SystemException.class})
+	public void delStudent(String name) throws SystemException{
+		try {
+			studentMapper.deleteStudent(name);
+		} catch (Exception e) {
+			throw new SystemException("系统删除错误");
+		}
+	}
+	
+	//更新学生信息
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={SystemException.class})
+	public void  updateStu(Student student) throws SystemException{
+		try {
+			studentMapper.updateStudent(student);
+		} catch (Exception e) {
+			throw new SystemException("系统更新异常");
+		}
+	}
+	
+	//查询符合条件的部分学生
+	@Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly=true)
+	public List<Student> findSomeGrades(Student student) throws SystemException{
+		List<Student> students = null;
+		try {
+			students = studentMapper.findStudent(student);
+		} catch (Exception e) {
+			throw new SystemException("系统内部查询错误");
+		}
+		
+		return students;
+	}
+	
+	public static void main(String[] args) throws SystemException {
+		
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("com/wuxianedu/config/applicationContext.xml");
+		StudentService gradeService = (StudentService)context.getBean("studentService");
+		Student student = gradeService.lookStu("13567830987", "000000");
+		System.out.println(student);
+		
+	}
+}

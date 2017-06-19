@@ -1,0 +1,13 @@
+package com.wuxianedu.controller;
+
+public class StudentInfoAndOperationHandler {
+	
+	public void showSelfInfo(){
+		
+	}
+
+	public void updateStudentInfo(){
+		
+		
+	}
+}

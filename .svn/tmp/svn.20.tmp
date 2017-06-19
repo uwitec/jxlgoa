@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.ItemMapper">
+    
+    <resultMap type="com.wuxianedu.domain.Item" id="ItemMap">
+    	<id property="iid" column="iid"/>
+    	<result property="topic" column="topic"/>
+    	<result property="optionA" column="optionA"/>
+    	<result property="optionB" column="optionB"/>
+    	<result property="optionC" column="optionC"/>
+    	<result property="optionD" column="optionD"/>
+    	<result property="answer" column="answer"/>
+    	<association property="types" javaType="com.wuxianedu.domain.Types">
+    		<id property="id" column="types_id"/>
+    		<result property="typeName" column="typeName"/>
+    	</association>
+    </resultMap>
+    
+    <select id="findAllItem" resultMap="ItemMap">
+    	select * from item
+    </select>
+    
+    <select id="findAItem"  resultMap="ItemMap">
+    	select * from item where iid=#{iid}
+    </select>
+    
+    <insert id="insertItem" parameterType="com.wuxianedu.domain.Item">
+    	insert into item(topic,optionA,optionB,optionC,optionD,answer,types_id) 
+    	values(#{topic},#{optionA},#{optionB},#{optionC},#{optionD},#{answer},#{types.id})
+    </insert>
+    
+    <update id="updateItem" parameterType="com.wuxianedu.domain.Item">
+    	update item set topic=#{topic},optionA=#{optionA},optionB=#{optionB},optionC=#{optionC},optionD=#{optionD},
+    	answer=#{answer},types_id=#{types.id} where iid=#{iid}
+    </update>
+    
+    <delete id="deleteItem" parameterType="com.wuxianedu.domain.Item">
+    	delete from item where iid=#{iid}
+    </delete>
+    
+    <select id="findItemByCondition" parameterType="com.wuxianedu.domain.Item" resultMap="ItemMap">
+    	select * from item
+    	<where>
+    		<if test="types.id !=null and types.id !=''">
+    			and types_id = #{types.id}
+			</if>
+			<if test="topic !=null and topic !=''">
+				and topic like '%${topic}%'
+			</if>
+    	</where>
+    </select>
+    
+    <select id="findItemCreatePaper" parameterType="paper" resultMap="ItemMap">
+    	select i.iid, i.topic, i.optionA, i.optionB, i.optionC, i.optionD, i.answer, i.types_id, t.typeName from item i 
+    	join types t on i.types_id = t.id 
+    	where t.typeName = #{types.typeName} order by rand() limit #{questionNumber}
+    </select>
+</mapper>
+
+

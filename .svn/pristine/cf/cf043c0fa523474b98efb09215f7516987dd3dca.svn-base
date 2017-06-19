@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.GradeMapper">
+
+	<!--实体类中属性与数据表中字段不对应时的处理方法  -->
+	 <resultMap type="grade" id="gradeResultMap">
+		 <id property="cid" column="gid"/>
+		 <result property="className" column="className"/>
+		 <result property="openTime" column="openTime"/>
+		 <result property="learningPhase" column="learningPhase"/>
+		 <result property="status" column="status"/>
+	<!--  实体类中属性与主键的映射  -->
+	
+		<association property="types" javaType="types">
+			<id property="id" column="types_id"/>
+			<result property="typeName" column="typeName"/>
+		</association>
+		
+		<association property="trainer" javaType="trainer">
+			<id property="tid" column="trainer_id"/>
+			<result property="trainerName" column="trainerName"/>
+			<result property="entryTime" column="entryTime"/>
+			<result property="workExperience" column="workExperience"/>
+			<result property="status" column="status"/>
+			<association property="types" javaType="types">
+				<id property="id" column="types_id"/>
+				<result property="typeName" column="typeName"/>
+			</association>
+		</association>
+		
+		<association property="adviser" javaType="adviser">
+			<id property="aid" column="adviser_id"/>
+			<result property="adviserName" column="adviserName"/>
+			<result property="entryTime" column="entryTime"/>
+			<result property="workExperience" column="workExperience"/>
+			<result property="status" column="status"/>
+		</association>
+	</resultMap> 
+		
+	<!--插入班级信息  -->
+	<insert id="insertGrade" parameterType="grade">
+		insert into grade(className,openTime,learningPhase,status,types_id,trainer_id,adviser_id)
+		values(#{className},#{openTime},#{learningPhase},#{status},#{types.id},#{trainer.tid},#{adviser.aid})
+	</insert>
+	
+	<!-- 查询班级信息 -->
+	<select id="queryGrade" parameterType="grade" resultMap="gradeResultMap">
+	
+		select g.className,g.openTime,g.learningPhase,g.status,g.types_id,g.trainer_id,g.adviser_id,t.typeName,tr.trainerName,
+		a.adviserName from
+		grade g join types t on g.types_id = t.id 
+	    join trainer tr on g.trainer_id = tr.tid 
+	    join adviser a on g.adviser_id = a.aid
+	   	where className = #{className}
+	</select>
+	
+	<!--查询部分条件  -->
+	<select id="findGrade" parameterType="grade" resultMap="gradeResultMap">
+		select g.className,g.openTime,g.learningPhase,g.status,g.types_id,g.trainer_id,g.adviser_id,t.typeName,tr.trainerName,
+		a.adviserName from
+		grade g join types t on g.types_id = t.id 
+	    join trainer tr on g.trainer_id = tr.tid 
+	    join adviser a on g.adviser_id = a.aid	
+	   	<where>
+
+			<if test="grade.className != null and grade.className!= != ''">
+				 and className = #{grade.className}
+			</if>
+			
+			<if test="grade.openTime != null and grade.openTime != ''">
+				 and openTime = #{grade.openTime}
+			</if>
+			
+			<if test="grade.learningPhase != null and grade.learningPhase  != ''">
+				 and learningPhase = #{grade.learningPhase}
+			</if>
+			
+			<if test="grade.status != null and grade.status != ''">
+				 and  status = #{grade.status}
+			</if>
+			
+			<if test="grade.types_id != null and grade.types_id != ''">
+				 and types_id= #{types.id}
+			</if>
+			
+			<if test="grade.trainer_id != null and grade.trainer_id != ''">
+				 and trainer_id = #{trainer.tid}
+			</if>
+			
+			<if test="grade.adviser_id != null and grade.adviser_id != ''">
+				 and adviser_id = #{adviser.aid}
+			</if>
+		</where>
+	</select>
+	<!--更新学生资料  -->
+	<update id="updateGrade" parameterType="grade">
+		update grade set
+		<where>
+			
+			<if test="grade.className != null and grade.className!= != ''">
+				 and className = #{className}
+			</if>
+			
+			<if test="grade.openTime != null and grade.openTime != ''">
+				 and openTime = #{openTime}
+			</if>
+			
+			<if test="grade.learningPhase != null and grade.learningPhase  != ''">
+				 and learningPhase = #{learningPhase}
+			</if>
+			
+			<if test="grade.status != null and grade.status != ''">
+				 and  status = #{status}
+			</if>
+			
+			<if test="grade.types_id != null and grade.types_id != ''">
+				 and types_id= #{types.id}
+			</if>
+			
+			<if test="grade.trainer_id != null and grade.trainer_id != ''">
+				 and trainer_id = #{trainer.tid}
+			</if>
+			
+			<if test="grade.adviser_id != null and grade.adviser_id != ''">
+				 and adviser_id = #{adviser.aid}
+			</if>
+		</where>
+	</update>
+	<!--根据姓名删除学生信息  -->
+	<delete id="deleteGrade" parameterType="int">
+		delete from grade where gid=#{cid}
+	</delete>
+	
+</mapper>
+
+

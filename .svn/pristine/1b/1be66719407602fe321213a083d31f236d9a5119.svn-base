@@ -1,0 +1,30 @@
+package com.wuxianedu.domain;
+
+public class ExamCondition {
+	
+	private String className;
+	private String examName;
+	
+	public ExamCondition() {
+		super();
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getExamName() {
+		return examName;
+	}
+
+	public void setExamName(String examName) {
+		this.examName = examName;
+	}
+	
+	
+
+}

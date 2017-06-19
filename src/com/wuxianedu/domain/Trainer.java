@@ -1,0 +1,73 @@
+package com.wuxianedu.domain;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Trainer {
+	
+	private int tid;
+	private String trainerName;
+	private Types types;
+	private Date entryTime;
+	private int workExperience;
+	private String status;
+	
+	public Trainer() {
+		super();
+	}
+	
+	public int getTid() {
+		return tid;
+	}
+	public void setTid(int tid) {
+		this.tid = tid;
+	}
+	public String getTrainerName() {
+		return trainerName;
+	}
+	public void setTrainerName(String trainerName) {
+		this.trainerName = trainerName;
+	}
+	public Types getTypes() {
+		return types;
+	}
+
+	public void setTypes(Types types) {
+		this.types = types;
+	}
+
+	public Date getEntryTime() {
+		return entryTime;
+	}
+	public void setEntryTime(Date entryTime) {
+		Date date=new Date(entryTime.getTime());
+		SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-dd");
+		String time=sdf.format(date);
+		java.sql.Date uptime=java.sql.Date.valueOf(time);
+		this.entryTime = uptime;
+	}
+	public int getWorkExperience() {
+		return workExperience;
+	}
+	public void setWorkExperience(int workExperience) {
+		this.workExperience = workExperience;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Trainer [tid=" + tid + ", trainerName=" + trainerName
+				+ ", types=" + types + ", entryTime=" + entryTime
+				+ ", workExperience=" + workExperience + ", status=" + status
+				+ "]";
+	}
+
+}

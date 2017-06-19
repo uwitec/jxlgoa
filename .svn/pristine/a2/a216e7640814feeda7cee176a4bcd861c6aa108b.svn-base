@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.TrainerMapper">
+	
+	<resultMap  type="trainer" id="listTrainer">
+		<id property="tid" column="tid" />
+		<result property="trainerName" column="trainerName" />
+		<result property="entryTime" column="entryTime" />
+		<result property="workExperience" column="workExperience" />
+		<result property="status" column="status" />
+		
+		<association property="types" javaType="com.wuxianedu.domain.Types">
+			<id property="id" column="types_id" />
+			<result property="typeName" column="typeName" />
+		</association>
+	</resultMap>
+	<!-- 查询所有的讲师信息 ;字段值全部加上-->
+	<select id="listAllTrainer" resultMap="listTrainer" >
+		select t.tid, t.trainerName ,t.entryTime,t.workExperience,t.status, ty.id types_id, ty.typeName
+			   from trainer t join types ty on
+			   t.types_id = ty.id
+	</select>
+	
+	<!-- 分页查询讲师的信息 -->
+	<select id="showTrainerByPage" parameterType="queryBean" resultMap="listTrainer">
+		  select tr.tid,tr.trainerName,tr.entryTime,tr.workExperience,tr.status,tr.types_id,ty.typeName 
+	 	from trainer tr join types ty on tr.types_id = ty.id 
+			   limit #{startIndex},#{pageSize}
+	</select>
+	<select id="countTrainer" resultType="Long">
+		select count(tid) from trainer
+	</select>
+	
+	<!--添加讲师信息  -->
+	 <insert id="insertTrainer" parameterType="trainer" >
+		<selectKey keyProperty="tid" order="AFTER" resultType="int">
+			select last_insert_id()
+		</selectKey>
+		insert into trainer(trainerName,types_id,entryTime,workExperience,status)
+		values(#{trainerName},#{types.id},#{entryTime},#{workExperience},#{status})
+	</insert>
+	
+	<!-- 修改 讲师的信息
+		注意：关联的外键就是数据表中的字段值，后面通过.的方式得到 
+	-->
+	 <update id="updateTrainer" parameterType="trainer">
+		
+		update trainer
+		set 
+		trainerName=#{trainerName},
+		entryTime=#{entryTime},
+		workExperience=#{workExperience},
+		status=#{status},
+		types_id=#{types.id}
+		where tid = #{tid}
+	</update>
+	
+	<!--
+		结课操作
+		点点击结课时，改变讲师的状态，变为结课 
+	-->
+	<update id="endClass" parameterType="trainer" >
+		update trainer
+		set 
+		trainerName=#{trainerName},
+		entryTime=#{entryTime},
+		workExperience=#{workExperience},
+		status=#{status},
+		types_id=#{types.id}
+		where tid = #{tid}
+	</update>
+	
+	<!--根据id查找讲师的信息  -->
+	<select id="findTrainerById" parameterType="int" resultMap="listTrainer">
+	    select tr.tid,tr.trainerName,tr.entryTime,tr.workExperience,tr.status,tr.types_id,ty.typeName 
+	 	from trainer tr join types ty on tr.types_id = ty.id 
+	 	where tr.tid =#{tid}
+	</select>
+	
+	<!--
+		 离职操作
+		 点击离职时，改变讲师状态，变为离职
+	 -->
+	 <update id="leaveJob" parameterType="trainer">
+	 	update  trainer
+		set
+		status=#{status}
+		where tid=#{tid}
+	 </update>
+	
+	 <!-- 
+	 	动态搜索
+	 	注意动态查询：要做联合查询
+	  -->
+	 <select id="searchTrainer" parameterType="queryBean" resultMap="listTrainer">
+	 	select tr.tid,tr.trainerName,tr.entryTime,tr.workExperience,tr.status,tr.types_id,ty.id,ty.typeName 
+	 	from trainer tr join types ty on tr.types_id = ty.id 
+	 	
+	 	<where>
+	 		<if test="trainerName!=null and trainerName!=''">
+			and trainerName like '${%trainer.trainerName%}'
+		</if>
+		<if test="entryTime !=null and entryTime!=''">
+			and entryTime = #{trainer.entryTime}
+		</if>
+		<if test="workExperience!=null and workExperience !=''">
+			and workExperience =#{trainer.workExperience}
+		</if>
+		<if test="status !=null and status !=''">
+			and status = #{trainer.status}
+		</if>
+		<if test="types !=null and types!=''">
+			and types_id = #{trainer.types.id}
+		</if>
+		<if test="true">
+				and "1" = "1"
+		</if>
+		<if test="true">
+			limit #{startIndex},#{pageSize}
+		</if>
+	 	</where>
+	 </select>
+	 <select id="searchTrainerByPage" parameterType="queryBean" resultMap="listTrainer">
+	 	select tr.tid,tr.trainerName,tr.entryTime,tr.workExperience,tr.status,tr.types_id,ty.id,ty.typeName 
+	 	from trainer tr join types ty on tr.types_id = ty.id 
+	 	
+	 	<where>
+	 	
+	 	 <if test="trainerName!=null and trainerName!=''">
+			and trainerName like '${%trainer.trainerName%}'
+		</if> 
+		 <if test="entryTime !=null and entryTime!=''">
+			and entryTime = #{trainer.entryTime}
+		</if> 
+		<if test="workExperience!=null and workExperience !=''">
+			and workExperience =#{trainer.workExperience}
+		</if>
+		<if test="status !=null and status !=''">
+			and status = #{trainer.status}
+		</if>
+		<if test="types !=null and types!=''">
+			and types_id = #{trainer.types.id}
+		</if>
+		<if test="true">
+				and "1" = "1"
+		</if>
+		<if test="true">
+			limit #{startIndex},#{pageSize}
+		</if>
+	 	</where>
+	 </select>
+	
+</mapper>
+
+

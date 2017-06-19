@@ -1,0 +1,104 @@
+package com.wuxianedu.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.wuxianedu.domain.Grade;
+import com.wuxianedu.domain.Types;
+import com.wuxianedu.exception.SelectStudentException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.service.GradeService;
+
+@Controller
+
+@RequestMapping("/admin")
+public class GradeHandler {
+
+	@Resource
+	private GradeService gradeService;
+	
+	//插入班级
+	@RequestMapping("/addStudent")
+	public void insertGrad(Grade grade){
+		try {
+			gradeService.insertGra(grade);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	//根据班级名称查找班级信息
+	@RequestMapping("/findGradeName")
+	public ModelAndView findGradeName(String name){
+		ModelAndView mav = new ModelAndView();
+		Grade grade = null;
+		try {
+			grade = gradeService.findGrade(name);
+			mav.addObject("grade", grade);
+			mav.setViewName("gradeList");
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (SelectStudentException e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	//根据id删除班级
+	@RequestMapping("/deleteGradeById")
+	public String deleteGradeById(int id){
+		try {
+			gradeService.delGrade(id);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return "redirect" + "";
+	}
+	
+	//更新班级信息
+	@RequestMapping("/updateGrades")
+	public String updateGrades(Grade grade){
+		try {
+			gradeService.updateGrad(grade);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	//查询班级
+	@RequestMapping("/getAllGrades")
+	public ModelAndView getAllGrades(Grade grade){
+		ModelAndView mav = new ModelAndView();
+		List<Grade> list = null;
+		try {
+			 list = gradeService.findSomeGrades(grade);
+			 mav.addObject("AllGrades", list);
+			 mav.setViewName("allGradesList");
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (SelectStudentException e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	@RequestMapping("/findGradeByTypesId")
+	@ResponseBody
+	public List<Grade> findGradeByTypesId(Types types){
+		List<Grade> grades = null;
+		try {
+			grades = gradeService.findGradeByTyepsId(types);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (SelectStudentException e) {
+			e.printStackTrace();
+		}
+		return grades;
+		
+		
+	}
+}

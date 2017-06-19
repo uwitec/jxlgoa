@@ -1,0 +1,111 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page contentType="text/html; charset=utf-8"%> 
+<%@ page import="java.text.*"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% 
+Date datetime=new Date();
+pageContext.setAttribute("date", datetime);
+%>
+<html>
+<head>
+<title>开始考试</title>
+<link href="student/images/css2.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+<!--
+.STYLE3 {font-size: 18px; }
+.STYLE4 {font-size: 18px; font-weight: bold; }
+.STYLE5 {color: #FF0000}
+-->
+</style>
+
+<script type="text/javascript">
+
+var date=new Date(<%=new java.util.Date().getTime()%>);
+var time1=120*60;
+function time(){
+	alert(<%=System.currentTimeMillis()%>);
+	time1=time1-1;
+	time2=120*60-time1;
+	kf=parseInt(time2/60);
+	km=time2%60;
+	sf=119-kf;
+	sm=60-km
+	document.getElementById("tTime").innerHTML = "考试已经开始了" +  kf+ "分" +km + "秒" + ",剩余"  + sf + "分" + sm + "秒";
+	if(time2<60){
+		alert("离考试结束还有60秒，请准备交卷！");
+		 }
+	if(time2==0){
+		alert("考试时间到!\n即将提交试卷!");
+		document.forms[0].submit();
+	}
+	}
+	window.setInterval("time()", 1000);
+ </script>
+</head>
+
+<body onload="sT()">
+<table width="1003" height="485" border="0" cellpadding="0" cellspacing="0" class="centerbg">
+  <tr>
+    <td width="149" height="485">&nbsp;</td>
+    <td width="741" valign="top" class="rightbian">
+	 <form action="submitExam.action" method="post">
+	<table width="98%" border="0" align="center" cellpadding="0" cellspacing="10">
+      <tr>
+        <td><div align="center" class="STYLE3">考试时间：120 分钟</div></td>
+        <td><div align="center" class="STYLE3">考生：${studentInfo.studentName}</div></td>
+        <td><div align="center" class="STYLE3">总分 ：100 分</div></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><div id="tTime"></div></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="3" bgcolor="#999999" class="STYLE4">选择题(每小题5分，共20个)</td>
+      </tr>
+	  <!--题目开始-->
+	 <c:forEach var="items" items="${Itemlist }">
+	  <tr>
+	  	 <input type="hidden" name="subjectID" value="${studentInfo.sid}"/>
+        <td colspan="3"><strong>第<span class="STYLE5">1</span>题&nbsp;${items.topic}</strong>		</td>
+      </tr>
+      <tr>
+        <td colspan="3"><strong>A．</strong>${items.optionA}</td>
+      </tr>
+      <tr>
+        <td colspan="3"><strong>B．</strong>${items.optionB}</td>
+      </tr>
+      <tr>
+        <td colspan="3"><strong>C．</strong>${items.optionC}</td>
+      </tr>
+      <tr>
+        <td colspan="3"><strong>D．</strong>${items.optionD}</td>
+      </tr>
+      <tr>
+        <td height="32" colspan="3" bgcolor="#CCCCCC">选择答案：
+          <input type="radio" name="subjectAnswer${items.answer}" value="A" />
+          A
+          <input type="radio" name="subjectAnswer${items.answer}" value="B" />
+          B
+          <input type="radio" name="subjectAnswer${items.answer}" value="C" />
+          C
+          <input type="radio" name="subjectAnswer${items.answer}" value="D" />
+          D</td>
+      </tr>
+	   <!--题目结束-->
+	   </c:forEach>
+      <tr>
+        <td colspan="3"><div align="center">
+          <input type="submit" value=" 提交答卷 " name="Submit" />
+        </div></td>
+      </tr>
+      
+      
+    </table>
+     </form>
+    </td>
+    <td width="113">&nbsp;</td>
+  </tr>
+</table>
+</body>
+</html>

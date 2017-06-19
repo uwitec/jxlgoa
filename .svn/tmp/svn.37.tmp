@@ -1,0 +1,172 @@
+package com.wuxianedu.controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.wuxianedu.domain.Exam;
+import com.wuxianedu.domain.ExamBean;
+import com.wuxianedu.domain.ExamCondition;
+import com.wuxianedu.domain.QueryBean;
+import com.wuxianedu.domain.Student;
+import com.wuxianedu.exception.ExamException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.service.ExamService;
+import com.wuxianedu.web.PageBean;
+
+@Controller
+@RequestMapping("/exam")
+public class ExamHandler {
+	
+	@Resource
+	private ExamService examService;
+
+	@RequestMapping("/findAllExam")
+	public String findAllExam(QueryBean queryBean, Model model){
+		PageBean<Exam> exams = null;
+		try {
+			exams = examService.findAllExam(queryBean);
+		} catch (ExamException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		}
+		model.addAttribute("examPageBean", exams);
+		return "admin/exam/showExam";
+	}
+	
+	// 根据条件查询考试
+	@RequestMapping("/findExamByCondition")
+	public String findExamByCondition(@Valid @ModelAttribute("examCondition") ExamCondition examCondition, 
+			Errors errors, QueryBean queryBean, HttpSession session, Model model){
+		PageBean<Exam> exams = null;
+		if(errors.hasErrors()){
+			return "admin/exam/showExam";
+		}
+		if(examCondition.getClassName() != null && !"".equals(examCondition.getClassName())){
+			session.setAttribute("paperConditionClassName", examCondition.getClassName());
+		}else{
+			examCondition.setClassName((String)session.getAttribute("paperConditionClassName"));
+		}
+		if(examCondition.getExamName() != null && !"".equals(examCondition.getExamName())){
+			session.setAttribute("paperConditionExamName", examCondition.getExamName());
+		}else{
+			examCondition.setExamName((String)session.getAttribute("paperConditionExamName"));
+		}
+		examCondition.setQueryBean(queryBean);
+		try {
+			exams = examService.findExamByCondition(examCondition);
+		} catch (ExamException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		}
+		model.addAttribute("examPageBeanByCondition", exams);
+		return "admin/exam/showExamByCondition";
+	}
+	
+	// 根据班级查询考试
+	@RequestMapping("/findExamByGrade")
+	public String findExamByGrade(Model model,HttpSession session){
+		Student student=(Student) session.getAttribute("studentInfo");
+		int cid = student.getGrade().getCid();
+		List<Exam> exams = null;
+		try {
+			exams = examService.findExamByGrade(cid);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "";
+		} catch (ExamException e) {
+			e.printStackTrace();
+			return "myExamManage";
+		}
+		model.addAttribute("exams", exams);
+		return "myExamManage";
+	}
+	// 根据考试ID查询
+	@RequestMapping("/findExamByEid")
+	public String findExamByEid(Exam exam, Model model){
+		Exam ex = null;
+		try {
+			ex = examService.findExamByEid(exam);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		} catch (ExamException e) {
+			e.printStackTrace();
+			return "admin/exam/showExam";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		String startTime = sdf.format(ex.getStartTime());
+		String endTime = sdf.format(ex.getEndTime());
+		ExamBean examBean = new ExamBean();
+		examBean.setEid(ex.getEid());
+		examBean.setCid(ex.getGrade().getCid());
+		examBean.setPid(ex.getPaper().getPid());
+		examBean.setExamName(ex.getExamName());
+		examBean.setStartTime(startTime);
+		examBean.setEndTime(endTime);
+		model.addAttribute("examBean", examBean);
+		return "admin/exam/updateExam";
+	}
+	// 创建考试
+	@RequestMapping("/createExam")
+	public String createExam(@Valid @ModelAttribute("examBean")ExamBean examBean, Errors errors){
+		if(errors.hasErrors()){
+			return "admin/exam/createExam";
+		}
+		try {
+			examService.createExam(examBean);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (ExamException e) {
+			e.printStackTrace();
+			return "admin/exam/createExam";
+		}
+		return "redirect:/exam/findAllExam";
+	}
+	// 修改考试
+	@RequestMapping("/updateExam")
+	public String updateExam(@Valid @ModelAttribute("examBean") ExamBean examBean, Errors errors){
+		if(errors.hasErrors()){
+			return "admin/exam/updateExam";
+		}
+		Exam exam = new Exam();
+		exam.setExamName(examBean.getExamName());
+		exam.setEid(examBean.getEid());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		Date startTime = null;
+		Date endTime = null;
+		try {
+			startTime = sdf.parse(examBean.getStartTime());
+			endTime = sdf.parse(examBean.getEndTime());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+			return "";
+		}
+		exam.setStartTime(startTime);
+		exam.setEndTime(endTime);
+		try {
+			examService.updateExam(exam);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "admin/exam/updateExam";
+		}
+		return "redirect:/exam/findAllExam";
+	}
+}

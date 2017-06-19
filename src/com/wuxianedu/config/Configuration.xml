@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<settings>  
+        <setting name="logImpl" value="LOG4J"/>  
+    </settings>  
+     <!--自己定义别名--> 
+   <typeAliases>
+    <!--通过扫描的方式-->  
+    <package name="com.wuxianedu.domain"/>
+    </typeAliases> 
+	<!-- 加载 映射文件 -->
+	<mappers>
+		<package name="com/wuxianedu/mapper" />
+	</mappers>
+</configuration>

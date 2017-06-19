@@ -1,0 +1,28 @@
+package com.wuxianedu.mapper;
+
+import java.util.List;
+
+import com.wuxianedu.domain.Exam;
+import com.wuxianedu.domain.ExamCondition;
+
+public interface ExamMapper {
+	
+	// 查询所有考试
+	public List<Exam> findAllExam();
+
+	// 根据条件查询考试
+	public List<Exam> findExamByCondition(ExamCondition examCondition);
+	
+	// 根据班级ID查询考试
+	public List<Exam> findExamByGrade(int cid);
+	
+	// 创建一场考试
+	public void createExam(Exam exam);
+	
+	// 修改一场考试
+	public void updateExam(Exam exam);
+	
+	// 修改考试状态
+	public void updateExamForStatus(Exam exam);
+	
+}

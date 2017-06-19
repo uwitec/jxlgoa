@@ -1,0 +1,142 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'index.jsp' starting page</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="teacher/js/bootstrap.css">
+	<script type="text/javascript" src="teacher/js/jquery.js"></script>
+	<script type="text/javascript" src="teacher/js/bootstrap.js"></script>
+</head>
+	<style type="text/css">
+
+	.bodyinfo{
+		width: 980px;
+		margin: auto;
+		margin-top: 80px;
+		height: 600px;
+	}
+	.bodyinfo1{
+
+		width: 880px;
+		height: 350px;
+	}
+	.info{
+		width: 690px;
+		display: inline-block;
+		height: 350px;
+		float: left;
+	}
+	.photo{
+		display: inline-block;
+
+		width: 180px;
+		float: right;
+		height: 200px;
+		margin-bottom: 150px;
+	}
+	.photo1{
+		width: 150px;
+		height: 170px;
+	}
+	.butt{
+		width: 100px;
+		height: 50px;
+		margin-left: 100px;
+
+	}
+	.textinfo1{
+
+		width: 770px;
+		height: 35px;
+	}
+	.textinfo2{
+
+		width: 770px;
+		height: 35px;
+		margin-top: 20px;
+	}
+	.textinfoin{
+
+		display: inline-block;
+		width: 330px;
+		height: 33px;
+		color: black;
+	}
+	</style>
+<body>
+	<div class="bodyinfo">
+		<div class="bodyinfo1">
+			<div class="info">
+				<div class="textinfo1">
+					<div class="textinfoin">
+						姓名:<input type="text" value="张三"><font color="red">不可以为空！</font>
+					</div>
+					<div class="textinfoin">
+						性别:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+					
+				</div>
+				<div class="textinfo2">
+					
+					<div class="textinfoin">
+						籍贯:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+					<div class="textinfoin">
+						手机:<input type="text"><font color="red">不可以为空！</font>
+					</div>
+				</div>
+				<div class="textinfo2">
+					
+					<div class="textinfoin">
+						毕业院校:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+					<div class="textinfoin">
+						出生年月:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+				</div>
+				<div class="textinfo2">
+					
+					<div class="textinfoin">
+						班级:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+					<div class="textinfoin">
+						类型:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+				</div>
+				<div class="textinfo2">
+				<div class="textinfoin">
+						学习状态:<input type="text" ><font color="red">不可以为空！</font>
+					</div>
+					<div class="textinfoin">
+						进班时间:<input type="text"><font color="red">不可以为空！</font>
+					</div>
+					
+				</div>
+			</div>
+			<div class="photo">
+				<div class="photo1">
+					
+				</div>
+				<input type="file">
+			</div>
+		</div>
+		<div class="butt">
+			<button class="btn btn-primary">更新资料</button>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+package com.wuxianedu.exception;
+
+public class ItemException extends Exception{
+
+	private static final long serialVersionUID = 1L;
+	public ItemException(Exception e) {
+        super(e);
+    }
+    public ItemException(String msg) {
+        super(msg);
+    }
+
+}

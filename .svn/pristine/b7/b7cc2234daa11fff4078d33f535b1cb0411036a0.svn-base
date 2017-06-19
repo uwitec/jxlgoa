@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.AdviserMapper">
+	
+	<!-- 查询所有的班主任信息 -->
+	<select id="listAllAdviser" resultType="adviser">
+		select *from adviser
+	</select>
+	
+	
+	<!-- 分页查询班主任的信息 -->
+	<select id="showAdviserByPage" parameterType="queryBean" resultType="adviser">
+		  select *from adviser 
+		  limit #{startIndex},#{pageSize}
+	</select>
+	<select id="countAdviser" resultType="Long">
+		select count(aid) from adviser
+	</select>
+	
+	<!-- 添加班主任信息 -->
+	<insert id="insertAdviser" parameterType="adviser">
+		<selectKey keyProperty="aid" order="AFTER" resultType="int">
+			select last_insert_id()
+		</selectKey>
+		insert into adviser(adviserName,entryTime,workExperience,status)
+		values(#{adviserName},#{entryTime},#{workExperience},#{status})
+	</insert>
+	
+	<!-- 修改班主任信息 -->
+	<update id="updateAdviser" parameterType="adviser">
+		update adviser
+		set
+		adviserName =#{adviserName},
+		entryTime =#{entryTime},
+		workExperience=#{workExperience},
+		status =#{status}
+		where aid=#{aid}
+	</update>
+	
+	<!-- 离职
+	 -->
+	 <update id="changeStatue" parameterType="adviser">
+	 	update  adviser
+		set
+		adviserName=#{adviserName},
+		entryTime =#{entryTime},
+		workExperience=#{workExperience},
+		status=#{status}
+		where aid=#{aid}
+	 </update>
+	 
+	 <!-- 动态搜索 -->
+	 <select id="searchAdviser" parameterType="adviser" resultType="adviser">
+	 		select a.adviserName,a.entryTime,a.workExperience,a.status from adviser a
+	 		<where>
+	 			<if test="adviserName!=null and adviserName!=''">
+	 				and adviserName like ${%adviserName%}
+	 			</if>
+	 			<if test="entryTime!=null and entryTime!=''">
+	 				and entryTime =#{entryTime}
+	 			</if>
+	 			<if test="workExperience!=null and workExperience!=''">
+	 				and workExperience =#{workExperience}
+	 			</if>
+	 			<if test="status!=null and status!=''">
+	 				and status =#{status}
+	 			</if>
+	 		</where>
+	 </select>
+	 
+	 <!-- 根据id进行查找 -->
+	 <select id="findAdviserById" parameterType="int" resultType="adviser">
+	 	select *from adviser where aid=#{aid}
+	 </select>
+	 
+	 
+</mapper>
+
+

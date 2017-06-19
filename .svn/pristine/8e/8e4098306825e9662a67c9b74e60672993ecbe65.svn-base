@@ -1,0 +1,212 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'index.jsp' starting page</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<title>addItem</title>
+	<link rel="stylesheet" type="text/css" href="teacher/js/bootstrap.css">
+	<script type="text/javascript" src="teacher/js/jquery.js"></script>
+	<script type="text/javascript" src="teacher/js/bootstrap.js"></script>
+	<style type="text/css">
+	.header{
+		width: 100%;
+		height: 25px;
+		text-align: center;
+	}
+	.body1{
+		margin: auto;
+		margin-top: 10px;
+		width: 80%;
+		height: 500px;
+	}
+	.bodytext0{
+		display: inline-block;
+		height: 40px;
+		margin-top: 10px;
+		width: 80px;
+		display: inline-block;
+		line-height: 30px;
+	}
+	.bodytext1{
+		height: 40px;
+		margin-top: 10px;
+		width: 60%;
+		display: inline-block;
+		line-height: 30px;
+
+	}
+	.bodytext3{
+		height: 30px;
+		margin-top: 10px;
+		width: 20%;
+		display: inline-block;
+		line-height: 30px;
+	}
+	.bodytext2{
+		height: 30px;
+		margin-top: 10px;
+		width: 10%;
+		display: inline-block;
+		line-height: 30px;
+	}
+
+	.sub{
+		height: 60px;
+		margin-top: 10px;
+		margin-left: 260px;
+		width: 40%;
+	}
+	.error{
+		display: inline-block;
+		margin-top: 10px;
+		margin-left: 20px;
+		width: 20%;
+		height: 30px;
+		line-height: 30px;
+		font-size: 5px;
+		color: red;
+	}
+	.syserror{
+		height: 30px;
+		margin-top: 10px;
+		margin-left: 260px;
+		width: 40%;
+		color: red;
+		text-align: center;
+	}
+	
+</style>
+</head>
+
+<body>
+	<div class="header">
+		<font size="5px">添加试题</font>
+
+	</div>
+	<div class="body1">
+	<jsp:useBean id="itemBean" class="com.wuxianedu.domain.ItemBean" scope="request"></jsp:useBean>
+	<form:form modelAttribute="itemBean" action="insertItem" method="POST">
+		<div class="bodytext0">
+			<font size="5px">题 目:&nbsp;&nbsp;</font>
+		</div>
+		
+		<div class="bodytext1">
+		<!-- <input type="text" class="form-control" placeholder="请输入题目"> -->
+		<form:input path="topic" cssClass="form-control"/>
+		</div>
+		<div class="error">
+			<form:errors path="topic"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">选项A:</font>
+		</div>
+		
+		<div class="bodytext1 " >
+		<!-- <input type="text" class="form-control" placeholder="请输入A选项内容"> -->
+		<form:input path="optionA" cssClass="form-control"/>
+		</div>
+		<div class="error">
+			<form:errors path="optionA"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">选项B:</font>
+		</div>
+		
+		<div class="bodytext1">
+		<!-- <input type="text" class="form-control" placeholder="请输入B选项内容"> -->
+		<form:input path="optionB"  cssClass="form-control"/>
+		</div>
+		<div class="error">
+			<form:errors path="optionB"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">选项C:</font>
+		</div>
+		<div class="bodytext1">
+		<!-- <input type="text" class="form-control" placeholder="请输入C选项内容"> -->
+		<form:input path="optionC" cssClass="form-control" />
+		</div>
+		<div class="error">
+			<form:errors path="optionC"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">选项D:</font>
+		</div>
+		<div class="bodytext1">
+		<!-- <input type="text" class="form-control" placeholder="请输入D选项内容"> -->
+		<form:input path="optionD" cssClass="form-control"/>
+		</div>
+		<div class="error">
+			<form:errors path="optionD"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">答 案:&nbsp;&nbsp;</font>
+		</div>
+		
+		<div class="bodytext3">
+
+		<form:radiobutton path="answer" value="A" />A&nbsp;&nbsp;&nbsp;&nbsp;
+		<form:radiobutton path="answer" value="B" />B&nbsp;&nbsp;&nbsp;&nbsp;
+		<form:radiobutton path="answer" value="C" />C&nbsp;&nbsp;&nbsp;&nbsp;
+		<form:radiobutton path="answer" value="D" />D&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+		<div class="error">
+			<form:errors path="answer"/>
+		</div>
+		<br>
+		<div class="bodytext0">
+			<font size="5px">类 型:&nbsp;&nbsp;</font>
+		</div>
+		
+		<div class="bodytext2">
+		<form:select path="types" cssClass="form-control">
+			<form:option value="1">java</form:option>
+			<form:option value="1">web</form:option>
+			<form:option value="1">ios</form:option>
+			<form:option value="1">android</form:option>
+		</form:select>
+		
+		</div>
+		<div class="error">
+			<form:errors path="types"/>
+		</div>
+		<br>
+		<br>
+		<div class="syserror">
+			<b><p>系统错误</p></b>
+		</div>
+		<br>
+
+		<div class="sub">
+			<input type="submit"value="&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;" class="btn btn-success">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="reset" value="&nbsp;&nbsp;&nbsp;&nbsp;重置&nbsp;&nbsp;&nbsp;&nbsp;" class="btn btn-success">
+		</div>
+		
+		</form:form>
+	</div>
+
+</body>
+</html>

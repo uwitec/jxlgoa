@@ -1,0 +1,57 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+public class Adviser {
+	
+	private int aid;
+	private String adviserName;
+	private Date entryTime;
+	private String workExperience;
+	private String condition;
+	public Adviser() {
+		super();
+	}
+	public Adviser(int aid, String adviserName, Date entryTime,
+			String workExperience, String condition) {
+		super();
+		this.aid = aid;
+		this.adviserName = adviserName;
+		this.entryTime = entryTime;
+		this.workExperience = workExperience;
+		this.condition = condition;
+	}
+	public int getAid() {
+		return aid;
+	}
+	public void setAid(int aid) {
+		this.aid = aid;
+	}
+	public String getAdviserName() {
+		return adviserName;
+	}
+	public void setAdviserName(String adviserName) {
+		this.adviserName = adviserName;
+	}
+	public Date getEntryTime() {
+		return entryTime;
+	}
+	public void setEntryTime(Date entryTime) {
+		this.entryTime = entryTime;
+	}
+	public String getWorkExperience() {
+		return workExperience;
+	}
+	public void setWorkExperience(String workExperience) {
+		this.workExperience = workExperience;
+	}
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	
+	
+
+}

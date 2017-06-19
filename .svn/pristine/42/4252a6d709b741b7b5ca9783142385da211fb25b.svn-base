@@ -1,0 +1,169 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.wuxianedu.domain.Paper"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'showPaper.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" type="text/css" href="teacher/js/bootstrap.css">
+	<script type="text/javascript" src="teacher/js/jquery.js"></script>
+	<script type="text/javascript" src="teacher/js/bootstrap.js"></script>
+	<style type="text/css">
+	.header{
+		width: 100%;
+		height: 25px;
+		text-align: center;
+	}
+	.select{
+		margin-top: 10px;
+		width: 100%;
+		height: 50px;
+	}
+	.selecttext{
+		text-align: right;
+		display: inline-block;
+		width: 150px;
+
+	}
+	.selectbody1{
+		margin-left: 0px;
+		width: 150px;
+		display: inline-block;
+
+	}
+	.selectbody2{
+		margin-left: 100px;
+		width: 300px;
+		display: inline-block;
+	}
+	.selectbody3{
+		margin-left: 50px;
+		width: 100px;
+		display: inline-block;
+	}
+	.body{
+		width: 95%;
+		height: 425px;
+		margin: auto;
+	}
+	.page{
+		width: 60%;
+		height: 50px;
+		margin: auto;
+	}
+	.opration{
+		width: 100px;
+	}
+
+</style>
+</head>
+
+<body>
+	<div class="header">
+		<font size="5px">试卷管理</font>
+
+	</div>
+	<jsp:useBean id="paperCondition" class="com.wuxianedu.domain.PaperCondition" scope="request"></jsp:useBean>
+	<form:form modelAttribute="paperCondition" action="paper/findPaperByNameOrTypes" method="POST">
+		<div class="select">
+			<div class="selecttext">
+				<h5><font size="4px">按条件查找：</font></h5>
+			</div>
+			<div class="selectbody1">
+				类型：
+				<select name="typeName" class="form-control">
+					<option disabled="disabled" selected="selected">-请选择-</option>
+					<option value="web" >Web</option>
+					<option value="java">Java</option>
+					<option value="ios">ios</option>
+					<option value="android">Android</option>
+				</select>
+			</div>
+			<div class="selectbody2">
+				试卷名称： <form:input path="paperName" class="form-control" />
+			</div>
+			<form:errors>paperName</form:errors>
+			<div class="selectbody3">
+				<input type="submit" class="btn btn-success" value="&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;" />
+			</div>
+		</div>
+	</form:form>
+
+	<div class="body">
+		<c:if test="${not empty papers}">
+			<table class="table table-striped">
+				<tr>
+					<th>名称</th>
+					<th>类型</th>
+					<th>试题数量</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr>
+				<c:forEach items="${papers}" var="paper">
+					<!-- 情景颜色 -->
+					<tr class="active">
+						<td class="success ">${paper.paperName }</td>
+						<td class="info">${paper.types.typeName }</td>
+						<td class="warning">${paper.questionNumber }</td>
+						<td class="danger">${paper.createTime }</td>
+						<td>
+							<div class="opration">
+								<select id="selectId${paper.pid}" class="form-control" onchange="change(${paper.pid})">
+									<option disabled="disabled" selected="selected" >-操作-</option>
+									<option value="1" >预览</option>
+									<option value="2" >修改</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+				</c:forEach>	
+			</table>
+		</c:if>
+		<c:if test="${empty papers }">
+			<h2 align="center">没有试卷</h2>
+		</c:if>
+	</div>
+	<div class="page">
+		 <div class="person-bottom" style="padding-top: 10px; float: right;">
+                    <button class="btn btn-default disabled">&lt;&nbsp;上一页</button>
+                    <button  class="btn btn-default">1</button>
+                    <button  class="btn btn-default">2</button>
+                    <button  class="btn btn-default">3</button>
+                    <button  class="btn btn-default">4</button>
+                    <button   class="btn btn-default">5</button>
+                    <button  class="btn btn-default">6</button>
+                    <button class="btn btn-default">下一页&nbsp;&gt;</button>
+                     <span class='bottom-txt' style=''>共35页</span>
+                    <span class="bottom-txt">到第<input type="text" value="1" style="width: 40px; height: 35px; text-align: center;">页</span>
+                    <button class="btn btn-default">确定</button>
+                </div>
+	</div>
+
+</body>
+<script type="text/javascript">
+
+	function change(id){
+		var value = $('#selectId'+id).children("option:selected").val();
+		if(value==1){
+			window.location.href="/OA/paper/findPaperAndItem?pid="+id;
+		}
+		if(value==2){
+			window.location.href="/OA/paper/findPaperById?pid="+id;
+		}
+	}
+</script>
+</html>

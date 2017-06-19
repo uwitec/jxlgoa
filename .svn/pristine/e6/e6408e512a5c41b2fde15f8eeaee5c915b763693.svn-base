@@ -1,0 +1,18 @@
+package com.wuxianedu.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class StudentExamHandler {
+	
+	public void beginExam(){
+		
+	}
+
+	public void showAnswer(){
+		
+	}
+	
+	
+	
+}

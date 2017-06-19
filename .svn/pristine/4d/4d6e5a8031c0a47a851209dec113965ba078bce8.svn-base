@@ -1,0 +1,57 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+import java.util.Set;
+
+public class Paper {
+	
+	private int pid;
+	private String paperName;
+	private Type type;
+	private int questionNumber;
+	private Date createTime;
+	private Set<Item> setItem;
+	public Paper() {
+		super();
+	}
+	
+	public int getPid() {
+		return pid;
+	}
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+	public String getPaperName() {
+		return paperName;
+	}
+	public void setPaperName(String paperName) {
+		this.paperName = paperName;
+	}
+	public Type getType() {
+		return type;
+	}
+	public void setType(Type type) {
+		this.type = type;
+	}
+	public int getQuestionNumber() {
+		return questionNumber;
+	}
+	public void setQuestionNumber(int questionNumber) {
+		this.questionNumber = questionNumber;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public Set<Item> getSetItem() {
+		return setItem;
+	}
+	public void setSetItem(Set<Item> setItem) {
+		this.setItem = setItem;
+	}
+	
+	
+
+}

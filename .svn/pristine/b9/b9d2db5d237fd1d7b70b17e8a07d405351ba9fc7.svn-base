@@ -1,0 +1,43 @@
+package com.wuxianedu.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class StudentExamHandler {
+	
+	public void beginExam(){
+		//开始考试
+		
+	}
+
+	public void showAnswer(){
+		
+	}
+	
+	public void getAnswer(HttpServletRequest request){
+		int count=0;
+		String[] studentAnswers=new String[20];
+		for(int i = 0; i < 20; i++) {
+			String answer = request.getParameter("subjectAnswer"+i);
+			studentAnswers[i]=answer;
+		}
+		//paper里面的题目调出来
+		String[] trueAnswers=new String[20];
+		for(int i=0;i<20;i++){
+			if(trueAnswers[i].equals(studentAnswers[i])){
+				count++;
+			}
+		}
+		
+		//计算分数
+		//得出学生id，将对应的考试分数写入数据库
+	}
+	
+	
+	
+}

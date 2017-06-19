@@ -1,0 +1,78 @@
+
+*{margin:0;pardding:0;}
+
+input{
+      border: 0 none;
+      outline-style: none;
+      margin: 0;
+      padding: 0;
+  }
+
+.manager-body{
+	width: 80%;
+	height: 500px;
+	margin: 0 auto;
+}
+/*    -- 管理导航项 -- */
+.manager-nav{
+	width: 20%;
+	float: left;
+}
+ .manager-nav h3{color: gray;}
+ .manager-nav a{font-size: 16px; font-weight: bold;}
+ .manager-nav a:link{color: black;}
+ .manager-nav a:visited{color: black;}
+ .manager-nav a:active{color: black;}
+ .act{
+     	background-color: rgb(244,242,239);
+     	border-right: 5px solid orange;
+     }
+
+/* -- 管理项对应的内容 -- */
+/* -- 内容一:用户管理 -- */
+.manager-content1,.manager-content2,.manager-content3{
+	width: 80%;
+	float: right;
+	padding: 20px;
+	border-left: 1px solid #DBDBDB;
+/* 	background-color: pink; */
+}
+
+/* -- 内容二:书籍管理 -- */
+.manager-content2,.manager-content3{
+   display: none;
+}
+
+.manager-content2 .list-group-item{/* width: 100%; */height: 150px;}
+
+.manager-content2 .manager-img{
+	width: 250px;
+	height: 130px;
+	/* background-color: pink; */
+	float: left;
+}
+
+.manager-content2 .manager-img img{float: left;}
+.manager-content2 .manager-img .manager-description{
+	float: right; 
+	width: 150px; 
+	padding-top: 15px;
+	padding-left: 20px;
+	font-size: 16px;
+	font-weight: bold;
+	}
+.manager-content2 .manager-img .manager-description .repertory{
+	margin-top: 40px;
+}
+.manager-description .repertory span{color: gray; font-weight: normal;}
+
+.manager-content2 .manager-button{
+	width: 30%;
+	float: right;
+	margin-top: 50px;
+}
+.manager-content2 .manager-button button{
+	margin-right: 50px;
+}
+/* -- 书籍库存管理-- */
+.body2{display: none;}

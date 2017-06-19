@@ -1,0 +1,63 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+import java.util.Set;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+
+public class Paper {
+	
+	private int pid;
+	@NotEmpty(message="试卷名不能为空")
+	private String paperName;
+	private Types types;
+	private int questionNumber;
+	private Date createTime;
+	private Set<Item> setItem;
+	public Paper() {
+		super();
+	}
+	
+	public int getPid() {
+		return pid;
+	}
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+	public String getPaperName() {
+		return paperName;
+	}
+	public void setPaperName(String paperName) {
+		this.paperName = paperName;
+	}
+	public Types getTypes() {
+		return types;
+	}
+
+	public void setTypes(Types types) {
+		this.types = types;
+	}
+
+	public int getQuestionNumber() {
+		return questionNumber;
+	}
+	public void setQuestionNumber(int questionNumber) {
+		this.questionNumber = questionNumber;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public Set<Item> getSetItem() {
+		return setItem;
+	}
+	public void setSetItem(Set<Item> setItem) {
+		this.setItem = setItem;
+	}
+	
+	
+
+}

@@ -1,0 +1,163 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+
+public class Student {
+	
+	/**
+	 * @param sid
+	 * @param studentName
+	 * @param graduateInstitutions
+	 * @param birthday
+	 * @param phone
+	 * @param password
+	 * @param gender
+	 * @param photoAddress
+	 * @param nativePlace
+	 * @param registerTime
+	 * @param status
+	 * @param grade
+	 */
+
+	private int sid;
+	private String studentName;
+	private String graduateInstitutions;
+	private Date birthday;
+	private String phone;
+	private String password;
+	private String gender;
+	private String photoAddress;
+	private String nativePlace;
+	private Date registerTime;
+	private String status;
+	private Grade grade;
+	
+	public Student() {
+		super();
+	}
+	
+	public Student(String studentName, String graduateInstitutions,
+			Date birthday, String phone, String gender, Date registerTime,
+			String status, Grade grade) {
+		super();
+		this.studentName = studentName;
+		this.graduateInstitutions = graduateInstitutions;
+		this.birthday = birthday;
+		this.phone = phone;
+		this.gender = gender;
+		this.registerTime = registerTime;
+		this.status = status;
+		this.grade = grade;
+	}
+	
+	public Student(int sid, String studentName, String graduateInstitutions,
+			Date birthday, String phone, String password, String gender,
+			String photoAddress, String nativePlace, Date registerTime,
+			String status, Grade grade) {
+		super();
+		this.sid = sid;
+		this.studentName = studentName;
+		this.graduateInstitutions = graduateInstitutions;
+		this.birthday = birthday;
+		this.phone = phone;
+		this.password = password;
+		this.gender = gender;
+		this.photoAddress = photoAddress;
+		this.nativePlace = nativePlace;
+		this.registerTime = registerTime;
+		this.status = status;
+		this.grade = grade;
+	}
+	public int getSid() {
+		return sid;
+	}
+	public void setSid(int sid) {
+		this.sid = sid;
+	}
+	public String getStudentName() {
+		return studentName;
+	}
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+	public String getGraduateInstitutions() {
+		return graduateInstitutions;
+	}
+	public void setGraduateInstitutions(String graduateInstitutions) {
+		this.graduateInstitutions = graduateInstitutions;
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhotoAddress() {
+		return photoAddress;
+	}
+	public void setPhotoAddress(String photoAddress) {
+		this.photoAddress = photoAddress;
+	}
+	public String getNativePlace() {
+		return nativePlace;
+	}
+	public void setNativePlace(String nativePlace) {
+		this.nativePlace = nativePlace;
+	}
+	public Date getRegisterTime() {
+		return registerTime;
+	}
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Grade getGrade() {
+		return grade;
+	}
+	public void setGrade(Grade grade) {
+		this.grade = grade;
+	}
+<<<<<<< .mine
+
+	
+=======
+
+	@Override
+	public String toString() {
+		return "Student [sid=" + sid + ", studentName=" + studentName
+				+ ", graduateInstitutions=" + graduateInstitutions
+				+ ", birthday=" + birthday + ", phone=" + phone + ", password="
+				+ password + ", gender=" + gender + ", photoAddress="
+				+ photoAddress + ", nativePlace=" + nativePlace
+				+ ", registerTime=" + registerTime + ", status=" + status
+				+ ", grade=" + grade + "]";
+	}
+>>>>>>> .r94
+	
+	
+	
+}

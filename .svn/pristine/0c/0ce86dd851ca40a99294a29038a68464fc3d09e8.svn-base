@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.ExamMapper">
+	
+	<resultMap type="exam" id="examPaperGradeMap">
+		<id property="eid" column="eid" />
+		<result property="examName" column="examName" />
+		<result property="startTime" column="startTime" />
+		<result property="endTime" column="endTime" />
+		<association property="grade" javaType="grade">
+			<id property="cid" column="grade_id" />
+			<result property="className" column="className" />
+			<association property="trainer" javaType="trainer" >
+				<id property="tid" column="trainer_id" />
+				<result property="trainerName" column="trainerName"/>
+				<result property="entryTime" column="entryTime"/>
+				<result property="workExperience" column="workExperience"/>
+				<result property="status" column="status"/>
+				<association property="types" javaType="types">
+					<id property="id" column="types_id"/>
+					<result property="typeName" column="typeName"/>
+				</association>
+			</association>
+			<association property="adviser" javaType="adviser" >
+				<id property="aid" column="adviser_id" />
+				<result property="adviserName" column="adviserName"/>
+				<result property="entryTime" column="entryTime"/>
+				<result property="workExperience" column="workExperience"/>
+				<result property="status" column="status"/>
+			</association>
+		</association>
+		<association property="paper" javaType="paper" >
+			<id property="pid" column="paper_id" />
+			<result property="paperName" column="paperName" />
+			<result property="questionNumber" column="questionNumber" />
+			<result property="createTime" column="createTime" />
+			<association property="types" javaType="types">
+				<id property="id" column="types_id"/>
+				<result property="typeName" column="typeName" />
+			</association>
+			<collection property="setItem" ofType="item">
+				<id property="iid" column="item_id" />
+				<result property="topic" column="topic" />
+				<result property="optionA" column="optionA" />
+				<result property="optionB" column="optionB" />
+				<result property="optionC" column="optionC" />
+				<result property="optionD" column="optionD" />
+				<result property="answer" column="answer" />
+				<association property="types" javaType="types">
+					<id property="id" column="types_id" />
+					<result property="typeName" column="typeName" />
+				</association>
+			</collection>
+		</association>
+	</resultMap>
+	
+	<select id="findAllExam" resultMap="examPaperGradeMap">
+		select e.eid, e.examName, e.startTime, e.endTime, e.grade_id, e.paper_id, 
+		g.className, p.paperName   
+		from exam e 
+		join grade g on e.grade_id = g.gid   
+		join paper p on e.paper_id = p.pid
+	</select>
+	
+	<select id="findExamByCondition" parameterType="examCondition" resultMap="examPaperGradeMap">
+		select e.eid, e.examName, e.startTime, e.endTime, e.grade_id, e.paper_id, 
+		g.className from exam e 
+		join grade g on e.grade_id = g.gid 
+		join paper p on e.paper_id = p.pid
+		<where>
+			<if test="className != null and className != '' ">
+				and g.className like '%${className}%'
+			</if>
+			<if test="examName != null and examName != '' ">
+				and e.examName like '%${examName}%'
+			</if>
+		</where>  
+	</select>
+	<select id="findExamByGrade" parameterType="int" resultMap="examPaperGradeMap">
+		select e.eid, e.examName, e.startTime, e.endTime, e.grade_id, e.paper_id, 
+		g.className from exam e 
+		join grade g on e.grade_id = g.gid 
+		join paper p on e.paper_id = p.pid
+		where e.grade_id = #{cid}  
+	</select>
+	<select id="findExamByEid" parameterType="exam" resultMap="examPaperGradeMap">
+		select e.eid, e.examName, e.startTime, e.endTime, e.grade_id, e.paper_id, 
+		g.className from exam e 
+		join grade g on e.grade_id = g.gid 
+		join paper p on e.paper_id = p.pid
+		where e.eid = #{eid}  
+	</select>
+	<insert id="createExam" parameterType="exam" >
+		<selectKey keyProperty="eid" order="AFTER" resultType="int" >
+			SELECT last_insert_id()
+		</selectKey>
+		insert into exam(examName, startTime, endTime, grade_id, paper_id) 
+		values(#{examName}, #{startTime, jdbcType=TIMESTAMP}, #{endTime, jdbcType=TIMESTAMP}, #{grade.cid}, #{paper.pid})
+	</insert>
+	
+	<update id="updateExam" parameterType="exam">
+		update exam set examName = #{examName}, startTime = #{startTime}, endTime = #{endTime} where eid = #{eid}
+	</update>
+</mapper>
+
+

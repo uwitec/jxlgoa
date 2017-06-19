@@ -1,0 +1,97 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+public class Student {
+	
+	private int sid;
+	private String studentName;
+	private String graduateInstitutions;
+	private Date birthday;
+	private String phone;
+	private String password;
+	private String gender;
+	private String photoAddress;
+	private String nativePlace;
+	private Date registerTime;
+	private String condition;
+	private Grade grade;
+	public Student() {
+		super();
+	}
+	public int getSid() {
+		return sid;
+	}
+	public void setSid(int sid) {
+		this.sid = sid;
+	}
+	public String getStudentName() {
+		return studentName;
+	}
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+	public String getGraduateInstitutions() {
+		return graduateInstitutions;
+	}
+	public void setGraduateInstitutions(String graduateInstitutions) {
+		this.graduateInstitutions = graduateInstitutions;
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhotoAddress() {
+		return photoAddress;
+	}
+	public void setPhotoAddress(String photoAddress) {
+		this.photoAddress = photoAddress;
+	}
+	public String getNativePlace() {
+		return nativePlace;
+	}
+	public void setNativePlace(String nativePlace) {
+		this.nativePlace = nativePlace;
+	}
+	public Date getRegisterTime() {
+		return registerTime;
+	}
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
+	}
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	public Grade getGrade() {
+		return grade;
+	}
+	public void setGrade(Grade grade) {
+		this.grade = grade;
+	}
+	
+	
+
+}

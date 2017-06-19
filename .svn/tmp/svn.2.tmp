@@ -1,0 +1,32 @@
+package com.wuxianedu.mapper;
+
+import java.util.List;
+
+import com.wuxianedu.domain.Item;
+
+public interface ItemMapper {
+	
+	//查找所有试题
+	public List<Item> findAllItem();
+	
+	//查找一个试题进行更新
+	public Item findAItem(Item items);
+	
+	//添加试题
+	public void insertItem(Item items);
+	
+	//修改试题
+	public void updateItem(Item items);
+	
+	//删除试题
+	public void deleteItem(Item items);
+	
+	//按条件查找
+	public List<Item> findItemByCondition(Item items);
+	
+	//生成试卷
+	public List<Item> findItemCreatePaper(Item items);
+	
+	
+
+}

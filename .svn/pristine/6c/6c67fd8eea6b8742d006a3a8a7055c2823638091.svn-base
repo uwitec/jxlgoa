@@ -1,0 +1,141 @@
+package com.wuxianedu.controller;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.wuxianedu.domain.Paper;
+import com.wuxianedu.domain.PaperBean;
+import com.wuxianedu.domain.PaperCondition;
+import com.wuxianedu.domain.Types;
+import com.wuxianedu.exception.PaperException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.service.PaperService;
+
+@Controller
+@RequestMapping("/paper")
+public class PaperHandle {
+	
+	@Resource
+	private PaperService paperService;
+	
+	@RequestMapping("/findAllPaper")
+	public String findAllPaper(Model model){
+		List<Paper> papers = null;
+		try {
+			papers = paperService.findAllPaper();
+		} catch (PaperException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("papers", papers);
+		return "showPaper";
+	}
+	
+	@RequestMapping("/findPaperById")
+	public String findPaperById(Paper paper, Model model){
+		try {
+			paper = paperService.findPaperAndItem(paper);
+		} catch (PaperException e) {
+			e.printStackTrace();
+			return "";
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "";
+		}
+		model.addAttribute("paper", paper);
+		return "updatePaper";
+	}
+	
+	@RequestMapping("/findPaperAndItem")
+	public ModelAndView findPaperAndItem(Paper paper){
+		ModelAndView mav = new ModelAndView();
+		try {
+			paper = paperService.findPaperAndItem(paper);
+		} catch (PaperException e) {
+			e.printStackTrace();
+			mav.setViewName("showPaper");
+			return mav;
+		} catch (SystemException e) {
+			e.printStackTrace();
+			mav.setViewName("showPaper");
+			return mav;
+		}
+		mav.addObject("paper", paper);
+		mav.setViewName("showOnePaper");
+		return mav;
+	}
+	
+	@RequestMapping("/findPaperByNameOrTypes")
+	public ModelAndView findPaperByNameOrTypes(@Valid @ModelAttribute("paperCondition") PaperCondition paperCondition,
+			Errors errors){
+		ModelAndView mav = new ModelAndView();
+		List<Paper> papers = null;
+		try {
+			papers = paperService.findPaperByNameOrTypes(paperCondition);
+		} catch (PaperException e) {
+			e.printStackTrace();
+			mav.setViewName("showPaper");
+			return mav;
+		} catch (SystemException e) {
+			e.printStackTrace();
+			mav.setViewName("showPaper");
+			return mav;
+		}
+		mav.addObject("papers", papers);
+		mav.setViewName("showPaper");
+		return mav;
+	}
+	
+	@RequestMapping("/createPaper")
+	public String createPaper(@Valid @ModelAttribute("paperBean")PaperBean paperBean, Errors errors){
+		if(errors.hasErrors()){
+			return "createPaper";
+		}
+		int questionNumber;
+		try {
+			questionNumber = Integer.parseInt(paperBean.getQuestionNumber());
+		} catch (Exception e) {
+			return "createPaper";
+		}
+		int typesId = Integer.parseInt(paperBean.getTypesId());
+		Paper paper = new Paper();
+		paper.setPaperName(paperBean.getPaperName());
+		paper.setQuestionNumber(questionNumber);
+		paper.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		Types types = new Types();
+		types.setId(typesId);
+		paper.setTypes(types);
+		try {
+			paperService.createPaper(paper);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/paper/findAllPaper";
+	}
+	
+	@RequestMapping("/updatePaper")
+	public String updatePaper(@Valid @ModelAttribute("paper") Paper paper, Errors error){
+		if(error.hasErrors()){
+			return "updatePaper";
+		}
+		try {
+			paperService.updatePaper(paper);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return "";
+		}
+		return "redirect:/paper/findAllPaper";
+	}
+	
+}

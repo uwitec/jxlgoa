@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuxianedu.mapper.StudentMapper">
+
+	<!--实体类中属性与数据表中字段不对应时的处理方法  -->
+	 <resultMap type="student" id="studentResultMap">
+	<!--  实体类中属性与主键的映射  -->
+		<id property="sid" column = "sid"/>
+		<result property="studentName" column="studentName"/>
+		<result property="graduateInstitutions" column="graduateInstitutions"/>
+		<result property="birthday" column="birthday"/>
+		<result property="phone" column="phone"/>
+		<result property="gender" column="gender"/>
+		<result property="password" column="password"/>
+		<result property="nativePlace" column="nativePlace"/>
+		<result property="photoAddress" column="photoAddress"/>
+		<result property="registerTime" column="registerTime"/>
+		<result property="status" column="status"/>
+		<association property="grade" javaType="grade">
+			<id property="gid" column="grade_id"/>
+			<result property="className" column="className"/>
+			<result property="openTime" column="openTime"/>
+			<result property="learningPhase" column="learningPhase"/>
+			<result property="status" column="status"/>
+			<association property="types" javaType="types">
+				<id property="id" column="types_id"/>
+				<result property="typeName" column="typeName"/>
+			</association>
+			<association property="trainer" javaType="trainer">
+				<id property="tid" column="trainer_id"/>
+				<result property="trainerName" column="trainerName"/>
+				<result property="entryTime" column="entryTime"/>
+				<result property="workExperience" column="workExperience"/>
+				<result property="status" column="status"/>
+				<association property="types" javaType="types">
+					<id property="id" column="types_id"/>
+					<result property="typeName" column="typeName"/>
+				</association>
+			</association>
+			<association property="adviser" javaType="adviser">
+				<id property="aid" column="adviser_id"/>
+				<result property="adviserName" column="adviserName"/>
+				<result property="entryTime" column="entryTime"/>
+				<result property="workExperience" column="workExperience"/>
+				<result property="status" column="status"/>
+			</association>
+		</association>	 
+		</resultMap> 
+		
+	<!--插入学生信息  -->
+	<insert id="insertStudent" parameterType="student">
+		insert into student(studentName,graduateInstitutions,birthday,phone,password,gender,photoAddress,nativePlace,registerTime,status,grade_id)
+		values(#{studentName},#{graduateInstitutions},#{birthday},#{phone},#{password},#{gender},#{photoAddress},#{nativePlace},#{registerTime},#{status},#{grade.gid})
+	</insert>
+	
+	<!--根据用户名和密码  -->
+	<select id="lookStudent" parameterType="student" resultMap="studentResultMap">
+		select s.sid,s.studentName,s.graduateInstitutions,s.birthday,s.phone,s.password,s.gender,
+		s.photoAddress,s.nativePlace,s.registerTime,s.status,s.grade_id,g.className,g.gid from student s 
+		join grade g on s.grade_id = g.gid join types t on g.types_id=t.id
+		where s.phone=#{phone} and s.password = #{password}
+	</select>
+	
+	<!-- 根据id查询学生信息 -->
+	<select id="queryStudent" parameterType="int" resultMap="studentResultMap">
+		select s.sid,s.studentName,s.graduateInstitutions,s.birthday,s.phone,s.password,s.gender,
+		s.photoAddress,s.nativePlace,s.registerTime,s.status,s.grade_id,g.className,g.gid from student s 
+		join grade g on s.grade_id = g.gid
+		where sid=#{sid}
+	</select>
+	
+	<!--查询所有学生  -->
+	<select id="queryAllStudents" resultMap="studentResultMap">
+		select s.sid,s.studentName,s.graduateInstitutions,s.birthday,s.phone,s.password,s.gender,
+		s.photoAddress,s.nativePlace,s.registerTime,s.status,s.grade_id,g.className,g.gid from student s 
+		join grade g on s.grade_id = g.gid
+	</select>
+	
+	
+	<!--查询部分符合条学生  -->
+	<select id="findStudent" parameterType="studentBean" resultMap="studentResultMap">
+		select s.sid,s.studentName,s.graduateInstitutions,s.birthday,s.phone,s.password,s.gender,
+		s.photoAddress,s.nativePlace,s.registerTime,s.status,s.grade_id,g.className from student s 
+		join grade g on s.grade_id = g.gid
+		
+		<where>
+			<if test="sid != null and sid != ''">
+				and s.sid = #{sid}
+			</if>
+			<if test="gid != null and gid != ''">
+				and s.grade_gid = #{gid}
+			</if>
+			<if test="className != null  and className != ''">
+				and g.className like '${className}'
+			</if>
+			<if test="studentName != null and studentName != ''">
+				and s.studentName like '${studentName}'
+			</if>
+			<if test="graduateInstitutions != null and graduateInstitutions != ''">
+				and s.graduateInstitutions = #{graduateInstitutions}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				and s.birthday = #{birthday}
+			</if>
+			<if test="phone != null and phone != ''">
+				and s.phone = #{phone}
+			</if>
+			<if test="gender != null and gender != ''">
+				and s.gender = #{gender}
+			</if>
+			<if test="nativePlace != null and nativePlace != ''"> 
+				and s.nativePlace = #{nativePlace}
+			</if>
+			<if test="registerTime != null and registerTime != ''">
+				and s.registerTime = #{registerTime}
+			</if>
+			<if test="status != null and status != ''">
+				and s.status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<!--更新学生资料  -->
+	<update id="updateStudent" parameterType="student">
+		update student set grade_id=#{grade.cid},studentName=#{studentName},graduateInstitutions=#{graduateInstitutions},
+		birthday=#{birthday},gender=#{gender},phone=#{phone},password=#{password},photoAddress=#{photoAddress},nativePlace=
+		#{nativePlace},registerTime=#{registerTime},status=#{status}
+		where sid = #{sid}
+	</update>
+	
+	<!--根据id删除学生信息  -->
+	<delete id="deleteStudent" parameterType="int">
+		delete from student where sid=#{sid}
+	</delete>
+	
+</mapper>
+
+

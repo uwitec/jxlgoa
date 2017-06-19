@@ -1,0 +1,137 @@
+package com.wuxianedu.controller;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.jms.Session;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.wuxianedu.domain.Exam;
+import com.wuxianedu.domain.ExamInfoStateBean;
+import com.wuxianedu.domain.ExamResultBean;
+import com.wuxianedu.domain.Item;
+import com.wuxianedu.domain.ItemIdContrastBean;
+import com.wuxianedu.domain.Student;
+import com.wuxianedu.exception.ExamException;
+import com.wuxianedu.exception.SystemException;
+import com.wuxianedu.service.ExamService;
+import com.wuxianedu.service.ScoreService;
+import com.wuxianedu.utils.JudgeExamTimeUtils;
+
+@Controller
+public class StudentExamHandler {
+	
+	@Resource
+	private ExamService examService;
+	@Resource
+	private ScoreService scoreService;
+	
+	
+	@ResponseBody
+	@RequestMapping("getNowtime")
+	public String getNowtime(){
+		System.out.println("**************************00");
+		return System.currentTimeMillis()+"";
+	}
+	@ResponseBody
+	@RequestMapping("examState")
+	public List<ExamInfoStateBean> examState(HttpSession session){
+		Student student=(Student) session.getAttribute("studentInfo");
+		int cid = student.getGrade().getCid();
+		List<Exam> exams = null;
+		try {
+			exams = examService.findExamByGrade(cid);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (ExamException e) {
+			e.printStackTrace();
+		}
+		List<ExamInfoStateBean> examInfoStateBeanList=new ArrayList<ExamInfoStateBean>();
+		for (Exam exam : exams) {
+			ExamInfoStateBean examInfoStateBean=new ExamInfoStateBean();
+			examInfoStateBean.setExam(exam);
+			examInfoStateBean.setState(JudgeExamTimeUtils.judgeTime(examInfoStateBean.getExam()));
+			String score=scoreService.selectScore(student.getSid()+"", exam.getEid()+"");
+			examInfoStateBean.setScore(score);
+			examInfoStateBeanList.add(examInfoStateBean);
+		}
+		return examInfoStateBeanList;
+	}
+	
+	@RequestMapping("beginExam")
+	public ModelAndView beginExam(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView();
+		String id=request.getParameter("id");
+		Exam ex=new Exam();
+		Exam exam=null;
+		ex.setEid(Integer.parseInt(id));
+		try {
+			exam=examService.findExamByEid(ex);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (ExamException e) {
+			e.printStackTrace();
+		}
+		request.getSession().setAttribute("examid", ex.getEid());
+		mav.setViewName("exam");
+		ItemIdContrastBean iicb=new ItemIdContrastBean();
+		List<ItemIdContrastBean> listItem=new ArrayList<ItemIdContrastBean>();
+		Set<Item> set=exam.getPaper().getSetItem();
+		request.getSession().setAttribute("begintime", exam.getStartTime().getTime()+"");
+		int count=0;
+		for (Item item : set) {
+			count++;
+			iicb.setId(count+"");
+			iicb.setItem(item);
+			listItem.add(iicb);
+		}
+		
+		request.getSession().setAttribute("beginExamPaper", listItem);
+		mav.addObject("examingPaper", listItem);
+		return mav;
+		
+	}
+
+	public void showAnswer(){
+		
+	}
+	
+	@RequestMapping("examResult")
+	public String getAnswer(HttpServletRequest request,HttpSession session){
+		
+		ExamInfoStateBean examInfoStateBean=new ExamInfoStateBean();
+		int countScore=0;
+		String[] studentAnswers=new String[20];
+		for(int i = 1; i < 2; i++) {
+			String answer = request.getParameter("answer"+i);
+			studentAnswers[i]=answer;
+		}
+		//paper里面的题目调出来
+		List<ItemIdContrastBean> listItem=(List<ItemIdContrastBean>) request.getSession().getAttribute("beginExamPaper");
+		for (ItemIdContrastBean itemIdContrastBean : listItem) {
+			if(itemIdContrastBean.getItem().getAnswer().equals(studentAnswers[Integer.parseInt(itemIdContrastBean.getId())])){
+				countScore=countScore+10;
+			}
+		}
+		
+		examInfoStateBean.setScore(countScore+"");
+		Student stu=(Student) session.getAttribute("studentInfo");
+		
+		scoreService.insert(examInfoStateBean.getScore(), String.valueOf(stu.getSid()),session.getAttribute("examid")+"");
+		//存入数据库
+		//跳到调入页面
+		return "redirect:/exam/findExamByGrade.do";
+	}
+	
+	
+	
+}

@@ -1,0 +1,62 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+public class Trainer {
+	
+	private int tid;
+	private String trainerName;
+	private Type type;
+	private Date entryTime;
+	private String workExperience;
+	private Grade grade;
+	private String condition;
+	public Trainer() {
+		super();
+	}
+	
+	public int getTid() {
+		return tid;
+	}
+	public void setTid(int tid) {
+		this.tid = tid;
+	}
+	public String getTrainerName() {
+		return trainerName;
+	}
+	public void setTrainerName(String trainerName) {
+		this.trainerName = trainerName;
+	}
+	public Type getType() {
+		return type;
+	}
+	public void setType(Type type) {
+		this.type = type;
+	}
+	public Date getEntryTime() {
+		return entryTime;
+	}
+	public void setEntryTime(Date entryTime) {
+		this.entryTime = entryTime;
+	}
+	public String getWorkExperience() {
+		return workExperience;
+	}
+	public void setWorkExperience(String workExperience) {
+		this.workExperience = workExperience;
+	}
+	public Grade getGrade() {
+		return grade;
+	}
+	public void setGrade(Grade grade) {
+		this.grade = grade;
+	}
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	
+
+}

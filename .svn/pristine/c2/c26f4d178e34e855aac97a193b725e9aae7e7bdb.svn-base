@@ -1,0 +1,26 @@
+package com.wuxianedu.mapper;
+
+import java.util.List;
+
+import com.wuxianedu.domain.Student;
+
+public interface StudentMapper {
+	
+	//插入学生信息
+	public void insertStudent(Student student);
+	
+	//根据名字删除信息
+	public void deleteStudent(String name);
+	
+	//更新学生信息
+	public void updateStudent(Student student);
+	
+	//查询学生信息
+	public Student queryStudent(int id);
+	
+	//查询符合条件的学生
+	public List<Student> findStudent(Student student);
+	
+	//根据用户名和密码查询
+	public Student lookStudent(Student student);
+}

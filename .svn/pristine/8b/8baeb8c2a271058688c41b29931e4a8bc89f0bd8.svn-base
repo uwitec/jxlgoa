@@ -1,0 +1,69 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+public class Grade {
+
+	private int cid;
+	private String className;
+	private Types type;
+	private Date openTime;
+	private String learningPhase;
+	private String condition;
+	private Trainer trainer;
+	private Adviser adviser;
+	public Grade() {
+		super();
+	}
+	public int getCid() {
+		return cid;
+	}
+	public void setCid(int cid) {
+		this.cid = cid;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	public Types getType() {
+		return type;
+	}
+	public void setType(Types type) {
+		this.type = type;
+	}
+	public Date getOpenTime() {
+		return openTime;
+	}
+	public void setOpenTime(Date openTime) {
+		this.openTime = openTime;
+	}
+	public String getLearningPhase() {
+		return learningPhase;
+	}
+	public void setLearningPhase(String learningPhase) {
+		this.learningPhase = learningPhase;
+	}
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	public Trainer getTrainer() {
+		return trainer;
+	}
+	public void setTrainer(Trainer trainer) {
+		this.trainer = trainer;
+	}
+	public Adviser getAdviser() {
+		return adviser;
+	}
+	public void setAdviser(Adviser adviser) {
+		this.adviser = adviser;
+	}
+
+	
+	
+}

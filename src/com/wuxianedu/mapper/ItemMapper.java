@@ -1,0 +1,38 @@
+package com.wuxianedu.mapper;
+
+import java.util.List;
+import java.util.Set;
+
+import com.wuxianedu.domain.Item;
+import com.wuxianedu.domain.Paper;
+import com.wuxianedu.domain.QueryBean;
+import com.wuxianedu.domain.ResearchItemBean;
+
+public interface ItemMapper {
+	
+	//查找所有试题
+	public List<Item> findAllItem(QueryBean queryBean);
+	
+	//查找一个试题进行更新
+	public Item findAItem(Item items);
+	
+	//添加试题
+	public void insertItem(Item items);
+	
+	//修改试题
+	public void updateItem(Item items);
+	
+	//删除试题
+	public void deleteItem(Item items);
+	
+	//按条件查找
+	public  List<Item> findItemByCondition(ResearchItemBean researchItemBean);
+	
+	//生成试卷
+	public Set<Item> findItemCreatePaper(Paper paper);
+	
+	public Long countAllItem();
+	
+	public Long countItemByCondition(ResearchItemBean researchItemBean);
+
+}

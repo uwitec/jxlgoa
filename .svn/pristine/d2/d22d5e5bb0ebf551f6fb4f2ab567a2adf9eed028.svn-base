@@ -1,0 +1,53 @@
+package com.wuxianedu.domain;
+
+import java.util.Date;
+
+public class Exam {
+
+	private int eid;
+	private String examName;
+	private Date startTime;
+	private Date endTime;
+	private Grade grade;
+	private Paper Paper;
+	public Exam() {
+		super();
+	}
+	public int getEid() {
+		return eid;
+	}
+	public void setEid(int eid) {
+		this.eid = eid;
+	}
+	public String getExamName() {
+		return examName;
+	}
+	public void setExamName(String examName) {
+		this.examName = examName;
+	}
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	public Grade getaClass() {
+		return grade;
+	}
+	public void setaClass(Grade grade) {
+		this.grade = grade;
+	}
+	public Paper getPaper() {
+		return Paper;
+	}
+	public void setPaper(Paper paper) {
+		Paper = paper;
+	}
+	
+}
